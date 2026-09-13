@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   DRUPAL CORE & ADMIN ZERO-CONFLICT PROTECTION LAYER
+   Ensures Tailwind Preflight never disturbs Drupal admin toolbar, trays, dialogs
+   ========================================================================== */
+@layer base {
+  /* 1. Isolate Drupal Administration Toolbar & Trays */
+  #toolbar-administration,
+  #toolbar-administration *,
+  .admin-toolbar,
+  .admin-toolbar *,
+  .toolbar-tray,
+  .toolbar-tray *,
+  .toolbar-box,
+  .toolbar-box * {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  }
+
+  /* 2. Protect Drupal Off-Canvas Dialogs and Modal Windows */
+  .ui-dialog,
+  .ui-dialog *,
+  .drupal-off-canvas-reset,
+  .drupal-off-canvas-reset * {
+    box-sizing: border-box;
+  }
+
+  /* 3. Protect Contextual Links and Quick Edit overlays */
+  .contextual,
+  .contextual * {
+    box-sizing: border-box;
+  }
+}
+
+/* ==========================================================================
+   DRUPAL OLIVERO THEME BREAKOUTS
+   Allows MediCareHub application pages to take full width and clean canvas
+   without interfering with administrative backend pages.
+   ========================================================================== */
+@layer utilities {
+  /* Break out of Olivero grid, backgrounds, and container constraints */
+  html,
+  body,
+  body.path-frontpage,
+  body.path-user,
+  .dialog-off-canvas-main-canvas {
+    background-image: none !important;
+    background-color: #f8fafc !important;
+    overflow-x: hidden;
+  }
+
+  /* Ensure the top-level main canvas and regions take 100% width on app pages */
+  .path-frontpage .dialog-off-canvas-main-canvas,
+  .path-frontpage .main-content,
+  .path-frontpage .site-main,
+  .path-frontpage .region--content,
+  .path-frontpage .region-content,
+  .path-frontpage .block-system-main-block,
+  .path-frontpage .layout-container,
+  .path-user .dialog-off-canvas-main-canvas,
+  .path-user .main-content,
+  .path-user .site-main,
+  .path-user .region--content,
+  .path-user .region-content,
+  .path-user .block-system-main-block,
+  .path-user .layout-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    display: block !important;
+    float: none !important;
+  }
+
+  /* Override Olivero's 53.375rem (853px) medium content constraint */
+  .layout--pass--content-medium,
+  .layout--pass--content-medium > *,
+  .layout-content-medium,
+  .layout-content-medium > * {
+    grid-column: 1 / -1 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Doctor Appointment Application Shell */
+  .doctor-appointment-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  /* Hide Olivero clutter, water drops, redundant tabs, and raw titles on auth pages */
+  .path-user .tabs,
+  .path-user nav.tabs,
+  .path-user .breadcrumb,
+  .path-user .page-title,
+  .path-user h1.title {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   MEDICARE HUB COMPONENT SYSTEM (PURE TAILWIND VIA @apply)
+   Always preserved in bundle
+   ========================================================================== */
+
+/* Authentication card wrapper */
+.da-login-card {
+  @apply bg-white rounded-2xl shadow-xl border border-slate-200/80;
+}
+
+/* Form items spacing */
+.da-login-form .form-item,
+.da-login-card .form-item {
+  @apply mb-5 mt-0;
+}
+
+/* Form Labels */
+.da-login-form label,
+.da-login-card label {
+  @apply block text-xs font-bold text-slate-800 mb-1.5 normal-case tracking-normal;
+}
+
+/* Form Inputs (Username, Password, Text) */
+.da-login-form input.form-text,
+.da-login-form input.form-password,
+.da-login-card input.form-text,
+.da-login-card input.form-password,
+.da-input {
+  @apply w-full h-11 px-3.5 py-2 text-sm font-sans rounded-xl border border-slate-300 bg-slate-50 text-slate-900 transition-all outline-none box-border;
+}
+
+.da-login-form input.form-text:focus,
+.da-login-form input.form-password:focus,
+.da-login-card input.form-text:focus,
+.da-login-card input.form-password:focus,
+.da-input:focus {
+  @apply border-teal-600 bg-white ring-2 ring-teal-500/20 shadow-sm;
+}
+
+/* Submit Button */
+.da-login-form .form-actions,
+.da-login-card .form-actions {
+  @apply mt-6 mb-0 p-0 flex gap-3;
+}
+
+.da-login-form input.form-submit,
+.da-login-card input.form-submit,
+.da-submit-btn {
+  @apply flex items-center justify-center w-full h-11 px-5 text-sm font-bold text-white bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 rounded-xl cursor-pointer shadow-md shadow-teal-600/30 hover:shadow-lg hover:shadow-teal-600/40 hover:-translate-y-0.5 active:translate-y-0 transition-all border-0 text-center;
+}
+
+/* Logout Confirmation Buttons */
+.da-logout-confirm-btn {
+  @apply flex-1 flex items-center justify-center h-11 px-5 text-sm font-bold text-white bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 rounded-xl cursor-pointer shadow-md shadow-rose-600/30 hover:shadow-lg hover:-translate-y-0.5 transition-all border-0 text-center no-underline;
+}
+
+.da-logout-cancel-btn {
+  @apply flex-1 flex items-center justify-center h-11 px-5 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl cursor-pointer transition-all text-center no-underline;
+}
+
+/* Drupal Alert / Status Messages */
+.da-auth-messages .messages,
+.da-login-card .messages {
+  @apply rounded-xl p-3.5 text-sm mb-5 border-l-4;
+}
+
+.da-auth-messages .messages--error,
+.da-login-card .messages--error {
+  @apply bg-red-50 border-red-500 text-red-800;
+}
+
+.da-auth-messages .messages--status,
+.da-login-card .messages--status {
+  @apply bg-emerald-50 border-emerald-500 text-emerald-800;
+}
+
+/* User Profile Layout Grid */
+.da-profile-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+/* Drupal Core Account Metadata Details */
+.da-drupal-core-content article.profile {
+  @apply flex gap-4 flex-wrap;
+}
+
+.da-drupal-core-content .field {
+  @apply inline-flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200;
+}
+
+.da-drupal-core-content .field__label {
+  @apply font-semibold text-slate-500 text-xs m-0 p-0;
+}
+
+.da-drupal-core-content .field__item {
+  @apply text-slate-900 font-bold text-xs;
+}

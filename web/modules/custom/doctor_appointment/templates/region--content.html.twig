@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Clean full-width region override for Doctor Appointment.
+ * Replaces Olivero's layout--pass--content-medium constraint.
+ */
+#}
+{% if content %}
+  <div class="doctor-appointment-region-content w-full">
+    {{ content }}
+  </div>
+{% endif %}

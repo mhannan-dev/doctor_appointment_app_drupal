@@ -1,0 +1,76 @@
+{#
+/**
+ * @file
+ * Dedicated logout confirmation page layout for MediCare Hub.
+ * Bypasses Olivero's default layout with a branded confirmation dialog.
+ */
+#}
+<div class="doctor-appointment-shell min-h-screen flex flex-col bg-gradient-to-b from-slate-50 via-teal-50/20 to-slate-100 text-slate-800 antialiased font-sans">
+
+  <!-- Minimal Top Header -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5 text-slate-900 no-underline group">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-teal-600 via-emerald-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="font-extrabold text-lg tracking-tight text-slate-900 leading-none">MediCare<span class="text-teal-600">Hub</span></div>
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5">{{ 'Appointment System'|t }}</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-4">
+        <a href="/" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-teal-600 transition-colors">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          {{ 'Back to Home'|t }}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Logout Confirmation Content -->
+  <main class="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md space-y-6">
+
+      <!-- Brand & Title Header -->
+      <div class="text-center space-y-2">
+        <div class="mx-auto h-14 w-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center ring-1 ring-rose-100">
+          <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+          </svg>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
+          {{ 'Log out of MediCare Hub?'|t }}
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500">
+          {{ "You'll need to sign in again to access your dashboard and bookings."|t }}
+        </p>
+      </div>
+
+      <!-- Messages / Errors Slot -->
+      {% if page.highlighted %}
+        <div class="da-auth-messages">
+          {{ page.highlighted }}
+        </div>
+      {% endif %}
+
+      <!-- Card Container for Confirm Form -->
+      <div class="da-login-card p-6 sm:p-8 bg-white border border-slate-200/80 rounded-2xl shadow-xl shadow-slate-200/50">
+        {{ page.content }}
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Clean Minimal Footer -->
+  <footer class="bg-white border-t border-slate-200/80 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-center">
+      <span>MediCare Hub · Doctor Appointment Booking System</span>
+    </div>
+  </footer>
+</div>

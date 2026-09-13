@@ -1,0 +1,75 @@
+# =============================================================================
+# Composer Dependencies & Drupal Core
+# =============================================================================
+/vendor/
+/web/core/
+/drush/Commands/contrib/
+/web/libraries/
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+
+# =============================================================================
+# User Uploads, Compiled Assets & Private Files
+# =============================================================================
+/web/sites/*/files/
+/web/sites/*/private/
+/web/sites/simpletest/
+
+# =============================================================================
+# Sensitive Site Configuration & Local Overrides
+# =============================================================================
+/web/sites/*/*settings*.php
+!/web/sites/*/default.settings.php
+/web/sites/*/*services*.yml
+!/web/sites/*/default.services.yml
+
+# Uncomment the line below if you wish to commit the Docker-ready settings.php:
+# !/web/sites/default/settings.php
+
+# =============================================================================
+# Environment & Secret Files
+# =============================================================================
+.env
+.env.*
+!.env.example
+docker-compose.override.yml
+
+# =============================================================================
+# Frontend Build & Node Packages (Tailwind CSS / JS)
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# =============================================================================
+# IDEs, Editors & AI Agent Artifacts
+# =============================================================================
+.idea/
+.vscode/
+.claude/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# Operating System Files
+# =============================================================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Nn]ecro.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# =============================================================================
+# Temporary & Log Files
+# =============================================================================
+*.log
+*.sql
+*.tar.gz

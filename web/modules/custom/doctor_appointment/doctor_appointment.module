@@ -1,0 +1,209 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Doctor Appointment module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function doctor_appointment_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.doctor_appointment':
+      return '<p>' . t('Doctor Appointment Booking system core module.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function doctor_appointment_theme(): array {
+  return [
+    'page__doctor_appointment_dashboard' => [
+      'template' => 'page--doctor-appointment-dashboard',
+      'base hook' => 'page',
+    ],
+    'page__front' => [
+      'template' => 'page--front',
+      'base hook' => 'page',
+    ],
+    'doctor_appointment_home' => [
+      'variables' => [
+        'dashboard_url' => NULL,
+      ],
+      'template' => 'home-page',
+    ],
+    'patient_dashboard' => [
+      'variables' => [
+        'user_name' => NULL,
+        'upcoming_count' => 0,
+        'completed_count' => 0,
+        'pending_count' => 0,
+      ],
+      'template' => 'patient-dashboard',
+    ],
+    'doctor_dashboard' => [
+      'variables' => [
+        'doctor_name' => NULL,
+        'today_count' => 0,
+        'pending_count' => 0,
+      ],
+      'template' => 'doctor-dashboard',
+    ],
+    'clinic_admin_dashboard' => [
+      'variables' => [],
+      'template' => 'clinic-admin-dashboard',
+    ],
+    'page__user__profile' => [
+      'template' => 'page--user--profile',
+      'base hook' => 'page',
+    ],
+    'page__user__login' => [
+      'template' => 'page--user--login',
+      'base hook' => 'page',
+    ],
+    'page__user__logout__confirm' => [
+      'template' => 'page--user--logout--confirm',
+      'base hook' => 'page',
+    ],
+    'region__content' => [
+      'template' => 'region--content',
+      'base hook' => 'region',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function doctor_appointment_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name && str_starts_with($route_name, 'doctor_appointment.')) {
+    $suggestions[] = 'page__doctor_appointment_dashboard';
+  }
+  if ($route_name === 'doctor_appointment.homepage' || $route_name === 'view.frontpage_page_1' || \Drupal::service('path.current')->getPath() === '/') {
+    $suggestions[] = 'page__front';
+  }
+  if ($route_name === 'user.login' || $route_name === 'user.pass' || $route_name === 'user.register') {
+    $suggestions[] = 'page__user__login';
+  }
+  if ($route_name === 'user.logout.confirm') {
+    $suggestions[] = 'page__user__logout__confirm';
+  }
+  if ($route_name === 'entity.user.canonical' || $route_name === 'user.page') {
+    $suggestions[] = 'page__user__profile';
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function doctor_appointment_preprocess_page(array &$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $variables['is_homepage'] = ($route_name === 'doctor_appointment.homepage' || $route_name === 'view.frontpage_page_1' || \Drupal::service('path.current')->getPath() === '/');
+  if ($variables['is_homepage'] || ($route_name && str_starts_with($route_name, 'doctor_appointment.')) || in_array($route_name, ['user.login', 'user.pass', 'user.register', 'user.logout.confirm', 'entity.user.canonical', 'user.page'], TRUE)) {
+    $variables['#attached']['library'][] = 'doctor_appointment/dashboard';
+  }
+
+  // Preprocess profile user data for /user/{id} and /user/1.
+  if ($route_name === 'entity.user.canonical') {
+    $account = \Drupal::routeMatch()->getParameter('user');
+    if ($account instanceof \Drupal\user\UserInterface) {
+      $is_admin = $account->hasRole('administrator') || (int) $account->id() === 1;
+      $is_doctor = $account->hasRole('doctor');
+      $is_clinic_admin = $account->hasRole('clinic_admin');
+      $is_patient = $account->hasRole('patient');
+
+      $dashboard_url = Url::fromRoute('doctor_appointment.patient_dashboard')->toString();
+      $dashboard_label = t('Patient Portal');
+
+      if ($is_doctor) {
+        $dashboard_url = Url::fromRoute('doctor_appointment.doctor_dashboard')->toString();
+        $dashboard_label = t('Doctor Workstation');
+      }
+      elseif ($is_clinic_admin || $is_admin) {
+        $dashboard_url = Url::fromRoute('doctor_appointment.admin_dashboard')->toString();
+        $dashboard_label = t('Clinic Admin Dashboard');
+      }
+
+      $variables['profile_user'] = [
+        'id' => $account->id(),
+        'name' => $account->getDisplayName(),
+        'email' => $account->getEmail(),
+        'initial' => strtoupper(substr($account->getDisplayName(), 0, 1)),
+        'roles' => $account->getRoles(TRUE),
+        'created' => \Drupal::service('date.formatter')->format($account->getCreatedTime(), 'custom', 'M d, Y'),
+        'is_admin' => $is_admin,
+        'is_doctor' => $is_doctor,
+        'is_clinic_admin' => $is_clinic_admin,
+        'is_patient' => $is_patient,
+        'dashboard_url' => $dashboard_url,
+        'dashboard_label' => $dashboard_label,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for user_login_form.
+ */
+function doctor_appointment_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['#attached']['library'][] = 'doctor_appointment/dashboard';
+  $form['#attributes']['class'][] = 'da-login-form';
+
+  $form['name']['#title'] = t('Username or Email');
+  $form['name']['#attributes']['placeholder'] = t('e.g. test_doctor or test_patient');
+  $form['name']['#attributes']['class'][] = 'da-input';
+  $form['name']['#description'] = '';
+
+  $form['pass']['#title'] = t('Password');
+  $form['pass']['#attributes']['placeholder'] = t('Enter your password');
+  $form['pass']['#attributes']['class'][] = 'da-input';
+  $form['pass']['#description'] = '';
+
+  $form['actions']['submit']['#value'] = t('Sign In to Portal');
+  $form['actions']['submit']['#attributes']['class'][] = 'da-submit-btn';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for user_logout_confirm.
+ */
+function doctor_appointment_form_user_logout_confirm_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['#attached']['library'][] = 'doctor_appointment/dashboard';
+  $form['actions']['submit']['#attributes']['class'][] = 'da-logout-confirm-btn';
+  $form['actions']['cancel']['#attributes']['class'][] = 'da-logout-cancel-btn';
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function doctor_appointment_user_login($account) {
+  // Prevent redirection during CLI operations.
+  if (PHP_SAPI === 'cli') {
+    return;
+  }
+
+  $request = \Drupal::request();
+  if ($request->query->has('destination')) {
+    return;
+  }
+
+  $roles = $account->getRoles();
+
+  if (in_array('doctor', $roles, TRUE)) {
+    $destination = Url::fromRoute('doctor_appointment.doctor_dashboard')->toString();
+    $request->query->set('destination', $destination);
+  }
+  elseif (in_array('patient', $roles, TRUE)) {
+    $destination = Url::fromRoute('doctor_appointment.patient_dashboard')->toString();
+    $request->query->set('destination', $destination);
+  }
+  elseif (in_array('clinic_admin', $roles, TRUE)) {
+    $destination = Url::fromRoute('doctor_appointment.admin_dashboard')->toString();
+    $request->query->set('destination', $destination);
+  }
+}

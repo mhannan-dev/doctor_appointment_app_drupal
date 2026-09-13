@@ -1,0 +1,45 @@
+services:
+  drupal:
+    build: .
+    ports:
+      - "8090:80"
+    volumes:
+      - .:/var/www/html
+      - drupal_vendor:/var/www/html/vendor
+      - drupal_core:/var/www/html/web/core
+    environment:
+      DRUPAL_DB_HOST: db
+      DRUPAL_DB_PORT: "3306"
+      DRUPAL_DB_NAME: ${MYSQL_DATABASE:-drupal}
+      DRUPAL_DB_USER: ${MYSQL_USER:-drupal}
+      DRUPAL_DB_PASSWORD: ${MYSQL_PASSWORD:-drupal}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    command:
+      - --innodb_buffer_pool_size=256M
+      - --innodb_flush_log_at_trx_commit=2
+      - --innodb_redo_log_capacity=128M
+      - --max_connections=150
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-drupal}
+      MYSQL_USER: ${MYSQL_USER:-drupal}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-drupal}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  db_data:
+  drupal_vendor:
+  drupal_core:

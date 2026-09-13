@@ -1,0 +1,222 @@
+{#
+/**
+ * @file
+ * Public marketing home page for MediCare Hub.
+ *
+ * Available variables:
+ * - dashboard_url: Role-specific dashboard URL for logged-in users, or NULL for anonymous visitors.
+ */
+#}
+<div class="doctor-appointment-wrapper space-y-24 pb-12">
+
+  <!-- Hero Section -->
+  <section class="relative  overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 px-6 py-16 sm:px-12 sm:py-24 text-white shadow-2xl ring-1 ring-white/10">
+    <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[length:24px_24px] [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_70%)]"></div>
+
+    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm ring-1 ring-white/10">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          {{ 'Trusted Online Doctor Booking'|t }}
+        </span>
+        <h1 class="mt-6 text-4xl sm:text-6xl font-black tracking-tight leading-[1.05]">
+          {{ 'Book Your Doctor Appointment in'|t }}
+          <span class="bg-gradient-to-r from-teal-300 to-emerald-400 bg-clip-text text-transparent">{{ 'Minutes'|t }}</span>
+        </h1>
+        <p class="mt-5 text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
+          {{ 'Find verified specialists, check live chamber slot availability, and confirm your visit online — no phone calls, no waiting in line.'|t }}
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          {% if dashboard_url %}
+            <a href="{{ dashboard_url }}" class="inline-flex items-center gap-2 rounded-xl bg-teal-400 hover:bg-teal-300 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-0.5">
+              {{ 'Go to My Dashboard'|t }}
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          {% else %}
+            <a href="/user/register" class="inline-flex items-center gap-2 rounded-xl bg-teal-400 hover:bg-teal-300 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-teal-500/30 transition-all hover:-translate-y-0.5">
+              {{ 'Create Free Account'|t }}
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="/user/login" class="inline-flex items-center gap-2 rounded-xl bg-white/5 hover:bg-white/10 px-6 py-3.5 text-sm font-bold text-white ring-1 ring-white/15 backdrop-blur-sm transition-all">
+              {{ 'Log In'|t }}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Stats Row -->
+        <div class="mt-12 grid grid-cols-3 gap-6 max-w-md divide-x divide-white/10">
+          <div>
+            <div class="text-2xl sm:text-3xl font-black text-white">50+</div>
+            <div class="text-xs text-slate-400 mt-1 font-medium">{{ 'Specialties'|t }}</div>
+          </div>
+          <div class="pl-6">
+            <div class="text-2xl sm:text-3xl font-black text-white">24/7</div>
+            <div class="text-xs text-slate-400 mt-1 font-medium">{{ 'Online Booking'|t }}</div>
+          </div>
+          <div class="pl-6">
+            <div class="text-2xl sm:text-3xl font-black text-white">100%</div>
+            <div class="text-xs text-slate-400 mt-1 font-medium">{{ 'Verified Doctors'|t }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorative Appointment Card Mockup -->
+      <div class="hidden lg:flex justify-center">
+        <div class="relative w-full max-w-sm">
+          <div class="absolute -inset-4 rounded-[28px] bg-gradient-to-br from-teal-400/20 to-emerald-400/10 blur-2xl"></div>
+          <div class="relative rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-black/5 rotate-1 hover:rotate-0 transition-transform duration-300">
+            <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+              <div class="h-12 w-12 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900">Dr. Nusrat Jahan</div>
+                <div class="text-xs text-slate-500">{{ 'Cardiology · MBBS, FCPS'|t }}</div>
+              </div>
+              <span class="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                {{ 'Available'|t }}
+              </span>
+            </div>
+            <div class="mt-4 space-y-2.5">
+              <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ 'Today · Available Slots'|t }}</div>
+              <div class="grid grid-cols-3 gap-2 text-xs font-semibold">
+                <span class="rounded-lg border border-teal-200 bg-teal-50 text-teal-700 py-2.5 text-center">5:00 PM</span>
+                <span class="rounded-lg border border-slate-100 bg-slate-50 text-slate-300 py-2.5 text-center line-through">5:15 PM</span>
+                <span class="rounded-lg border border-teal-200 bg-teal-50 text-teal-700 py-2.5 text-center">5:30 PM</span>
+              </div>
+            </div>
+            <div class="mt-5 flex items-center justify-between text-xs pt-4 border-t border-slate-100">
+              <span class="text-slate-500 font-medium">{{ 'Consultation Fee'|t }}</span>
+              <span class="font-black text-slate-900 text-base">৳ 800</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="max-w-7xl mx-auto w-full scroll-mt-24">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-bold uppercase tracking-widest text-teal-600">{{ 'The Process'|t }}</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{{ 'How It Works'|t }}</h2>
+      <p class="mt-3 text-sm text-slate-500">{{ 'Three simple steps from search to confirmed visit.'|t }}</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="group relative rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center font-black text-lg mb-5 shadow-md shadow-blue-500/20">1</div>
+        <h3 class="text-base font-bold text-slate-900">{{ 'Search a Doctor'|t }}</h3>
+        <p class="mt-2.5 text-sm text-slate-500 leading-relaxed">{{ 'Browse specialists by specialty, chamber location, or consultation fee.'|t }}</p>
+      </div>
+      <div class="group relative rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center font-black text-lg mb-5 shadow-md shadow-teal-500/20">2</div>
+        <h3 class="text-base font-bold text-slate-900">{{ 'Pick a Slot'|t }}</h3>
+        <p class="mt-2.5 text-sm text-slate-500 leading-relaxed">{{ 'Choose a live, available time slot from the chamber schedule — no double booking.'|t }}</p>
+      </div>
+      <div class="group relative rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center font-black text-lg mb-5 shadow-md shadow-emerald-500/20">3</div>
+        <h3 class="text-base font-bold text-slate-900">{{ 'Confirm & Visit'|t }}</h3>
+        <p class="mt-2.5 text-sm text-slate-500 leading-relaxed">{{ 'Get instant confirmation and track your appointment status from your dashboard.'|t }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specialties -->
+  <section id="specialties" class="max-w-7xl mx-auto w-full scroll-mt-24">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-teal-600">{{ 'Specialties'|t }}</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{{ 'Browse by Specialty'|t }}</h2>
+      </div>
+      <p class="text-sm text-slate-500 max-w-sm">{{ 'The doctor directory is opening soon — sign up to get notified first.'|t }}</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {% set specialties = [
+        {label: 'Cardiology'|t, classes: 'bg-rose-50 text-rose-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 20.25c-.318 0-.635-.088-.912-.263C6.6 17.14 2.25 13.51 2.25 9.187 2.25 6.05 4.7 3.75 7.688 3.75c1.76 0 3.44.86 4.312 2.19.872-1.33 2.552-2.19 4.313-2.19 2.986 0 5.437 2.3 5.437 5.437 0 4.324-4.35 7.953-8.838 10.8-.277.175-.594.263-.912.263z"/>'},
+        {label: 'Dermatology'|t, classes: 'bg-amber-50 text-amber-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5.5 14l1 1 3.409-3.409M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.5 14l-1 1-3.409-3.409M14.25 3.104c.251.023.501.05.75.082M12 15.75h.008v.008H12v-.008z"/>'},
+        {label: 'Pediatrics'|t, classes: 'bg-sky-50 text-sky-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>'},
+        {label: 'Orthopedics'|t, classes: 'bg-orange-50 text-orange-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4.5 19.5l7.348-7.348m0 0a3 3 0 104.243-4.243 3 3 0 00-4.243 4.243zm0 0L19.5 4.5m-4.348 7.348L9.5 17.5m0 0a3 3 0 11-4.243 4.243A3 3 0 019.5 17.5z"/>'},
+        {label: 'Gynecology'|t, classes: 'bg-pink-50 text-pink-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 12.75a3 3 0 100-6 3 3 0 000 6zm0 0v6m-3 0h6"/>'},
+        {label: 'General Medicine'|t, classes: 'bg-teal-50 text-teal-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286z"/>'},
+        {label: 'Neurology'|t, classes: 'bg-violet-50 text-violet-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5.5 14l1 1m9.909-11.896v5.714c0 .597.237 1.17.659 1.591L21 14l-1 1M12 3v18"/>'},
+        {label: 'Dentistry'|t, classes: 'bg-cyan-50 text-cyan-600', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>'},
+      ] %}
+      {% for specialty in specialties %}
+        <div class="group relative rounded-2xl border border-slate-200 bg-white p-5 text-center transition-colors hover:border-slate-300">
+          <span class="absolute top-3 right-3 inline-flex items-center rounded-full bg-slate-50 px-2 py-0.5 text-[10px] font-bold text-slate-400 ring-1 ring-slate-200">{{ 'Soon'|t }}</span>
+          <div class="mx-auto h-12 w-12 rounded-xl {{ specialty.classes }} flex items-center justify-center mb-3">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">{{ specialty.icon|raw }}</svg>
+          </div>
+          <div class="text-sm font-bold text-slate-800">{{ specialty.label }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section id="why-us" class="max-w-7xl mx-auto w-full scroll-mt-24 relative overflow-hidden rounded-3xl bg-slate-950 p-8 sm:p-16 ring-1 ring-white/10">
+    <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:24px_24px]"></div>
+    <div class="relative text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-bold uppercase tracking-widest text-teal-400">{{ 'Benefits'|t }}</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-black text-white tracking-tight">{{ 'Why Choose MediCare Hub'|t }}</h2>
+    </div>
+    <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-2xl bg-teal-500/10 text-teal-300 flex items-center justify-center mb-4 ring-1 ring-teal-500/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h3 class="text-sm font-bold text-white">{{ 'Verified Doctors'|t }}</h3>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">{{ 'Every specialist is credential-checked before appearing in the directory.'|t }}</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-2xl bg-blue-500/10 text-blue-300 flex items-center justify-center mb-4 ring-1 ring-blue-500/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <h3 class="text-sm font-bold text-white">{{ 'Instant Confirmation'|t }}</h3>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">{{ 'Real-time slot locking means no double bookings and no waiting for a callback.'|t }}</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-300 flex items-center justify-center mb-4 ring-1 ring-emerald-500/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        </div>
+        <h3 class="text-sm font-bold text-white">{{ 'Secure & Private'|t }}</h3>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">{{ 'Your medical details and booking history stay isolated to your account.'|t }}</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-2xl bg-amber-500/10 text-amber-300 flex items-center justify-center mb-4 ring-1 ring-amber-500/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h3 class="text-sm font-bold text-white">{{ '24/7 Access'|t }}</h3>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">{{ 'Book or check appointment status any time, from any device.'|t }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  {% if not dashboard_url %}
+    <section class="relative max-w-7xl mx-auto w-full overflow-hidden rounded-3xl bg-gradient-to-br from-teal-600 via-teal-700 to-slate-900 p-10 sm:p-16 text-center text-white shadow-2xl">
+      <div class="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 left-1/4 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl pointer-events-none"></div>
+      <div class="relative">
+        <h2 class="text-3xl sm:text-4xl font-black tracking-tight">{{ 'Ready to take control of your healthcare?'|t }}</h2>
+        <p class="mt-3 text-sm text-teal-100 max-w-xl mx-auto">{{ 'Create your free account and book your first appointment in minutes.'|t }}</p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a href="/user/register" class="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-teal-700 shadow-lg hover:bg-teal-50 transition-all hover:-translate-y-0.5">
+            {{ 'Sign Up Free'|t }}
+          </a>
+          <a href="/user/login" class="inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/15 px-6 py-3.5 text-sm font-bold text-white ring-1 ring-white/20 transition-all">
+            {{ 'Log In'|t }}
+          </a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+</div>

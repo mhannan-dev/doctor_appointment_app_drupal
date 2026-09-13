@@ -1,0 +1,25 @@
+tailwindcss:
+  version: 3.4.17
+  css:
+    theme:
+      css/tailwind.css: { minified: true }
+
+dashboard:
+  version: 1.0
+  css:
+    theme:
+      https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap:
+        { type: external }
+      css/tailwind.css: { minified: true }
+
+password-toggle:
+  version: 1.0
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+  js:
+    js/password-toggle.js: {}
+  css:
+    component:
+      css/password-toggle.css: {}
