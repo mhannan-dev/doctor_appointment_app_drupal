@@ -46,6 +46,8 @@
   body,
   body.path-frontpage,
   body.path-user,
+  body.page-node-type-doctor-profile,
+  body.path-node,
   .dialog-off-canvas-main-canvas {
     background-image: none !important;
     background-color: #f8fafc !important;
@@ -66,7 +68,14 @@
   .path-user .region--content,
   .path-user .region-content,
   .path-user .block-system-main-block,
-  .path-user .layout-container {
+  .path-user .layout-container,
+  .page-node-type-doctor-profile .dialog-off-canvas-main-canvas,
+  .page-node-type-doctor-profile .main-content,
+  .page-node-type-doctor-profile .site-main,
+  .page-node-type-doctor-profile .region--content,
+  .page-node-type-doctor-profile .region-content,
+  .page-node-type-doctor-profile .block-system-main-block,
+  .page-node-type-doctor-profile .layout-container {
     max-width: 100% !important;
     width: 100% !important;
     margin-left: 0 !important;
@@ -100,12 +109,17 @@
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
 
-  /* Hide Olivero clutter, water drops, redundant tabs, and raw titles on auth pages */
+  /* Hide Olivero clutter, water drops, redundant tabs, and raw titles on auth & doctor pages */
   .path-user .tabs,
   .path-user nav.tabs,
   .path-user .breadcrumb,
   .path-user .page-title,
-  .path-user h1.title {
+  .path-user h1.title,
+  .page-node-type-doctor-profile .tabs,
+  .page-node-type-doctor-profile nav.tabs,
+  .page-node-type-doctor-profile .breadcrumb,
+  .page-node-type-doctor-profile .page-title,
+  .page-node-type-doctor-profile h1.title {
     display: none !important;
   }
 }
@@ -207,3 +221,189 @@
 .da-drupal-core-content .field__item {
   @apply text-slate-900 font-bold text-xs;
 }
+
+/* ==========================================================================
+   DOCTOR PROFILE FORM STYLES
+   ========================================================================== */
+.da-doctor-form-card {
+  @apply max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-slate-200/80 shadow-sm mb-8 space-y-6;
+}
+
+.da-doctor-form {
+  @apply space-y-6 max-w-4xl mx-auto;
+}
+
+.da-doctor-form .form-item {
+  @apply mb-5;
+}
+
+.da-doctor-form label,
+.da-doctor-form .form-item label {
+  @apply block text-xs font-bold text-slate-800 mb-1.5 normal-case tracking-normal;
+}
+
+.da-doctor-form .form-item--description,
+.da-doctor-form .description {
+  @apply text-xs text-slate-500 mt-1.5 leading-relaxed;
+}
+
+.da-doctor-form input.form-text,
+.da-doctor-form input.form-number,
+.da-doctor-form textarea.form-textarea {
+  @apply w-full px-3.5 py-2.5 text-sm font-sans rounded-xl border border-slate-300 bg-slate-50 text-slate-900 transition-all outline-none box-border;
+}
+
+.da-doctor-form input.form-text:focus,
+.da-doctor-form input.form-number:focus,
+.da-doctor-form textarea.form-textarea:focus {
+  @apply border-teal-600 bg-white ring-2 ring-teal-500/20 shadow-sm;
+}
+
+/* Multi-value table container */
+.da-doctor-form .field-multiple-table {
+  @apply w-full border border-slate-200 rounded-2xl overflow-hidden mb-4 bg-white shadow-sm border-separate;
+  border-spacing: 0;
+}
+
+/* Multi-value table header */
+.da-doctor-form .field-multiple-table thead th {
+  @apply bg-slate-50/90 px-4 py-3 text-xs font-black text-slate-800 uppercase tracking-wider text-left border-b border-slate-200;
+}
+
+.da-doctor-form .field-multiple-table thead th h4,
+.da-doctor-form .field-multiple-table thead th .form-item__label {
+  @apply text-xs font-black text-slate-800 uppercase tracking-wider m-0 p-0 inline-flex items-center gap-1 normal-case font-sans;
+}
+
+.da-doctor-form .field-multiple-table thead th .form-required::after {
+  content: "*" !important;
+  @apply text-teal-600 font-black ml-0.5 text-sm;
+}
+
+/* Reset form-item margins inside table rows so inputs are never pushed down */
+.da-doctor-form .field-multiple-table .form-item {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure all table cells align vertically to middle */
+.da-doctor-form .field-multiple-table tbody tr {
+  @apply border-b border-slate-100 transition-colors hover:bg-slate-50/50;
+}
+
+.da-doctor-form .field-multiple-table tbody td {
+  vertical-align: middle !important;
+  @apply border-b border-slate-100;
+}
+
+/* Drag handle column */
+.da-doctor-form .field-multiple-table td.field-multiple-drag {
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  max-width: 2.75rem !important;
+  padding: 0.5rem 0 0.5rem 0.75rem !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+.da-doctor-form .field-multiple-table a.tabledrag-handle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  margin: 0 auto !important;
+  vertical-align: middle !important;
+  float: none !important;
+  border-radius: 0.5rem !important;
+  color: #64748b !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.da-doctor-form .field-multiple-table a.tabledrag-handle:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.da-doctor-form .field-multiple-table a.tabledrag-handle .handle {
+  margin: 0 !important;
+  background-position: center center !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* Main input cell */
+.da-doctor-form .field-multiple-table td:not(.field-multiple-drag):not(:has(input[value="Remove"])):not(:has(.da-remove-btn)):not(.delta-order) {
+  padding: 0.625rem 0.75rem !important;
+  vertical-align: middle !important;
+}
+
+/* Remove button cell */
+.da-doctor-form .field-multiple-table td:has(input[value="Remove"]),
+.da-doctor-form .field-multiple-table td:has(.da-remove-btn),
+.da-doctor-form .field-multiple-table td:nth-child(3) {
+  width: 1% !important;
+  white-space: nowrap !important;
+  padding: 0.625rem 0.875rem 0.625rem 0.5rem !important;
+  vertical-align: middle !important;
+  text-align: right !important;
+}
+
+/* The Remove button itself */
+.da-doctor-form .field-multiple-table input[type="submit"][value="Remove"],
+.da-doctor-form .field-multiple-table input[name*="_remove_button"],
+.da-remove-btn {
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  box-sizing: border-box !important;
+  padding: 0 1.25rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #fecdd3 !important;
+  background-color: #fff1f2 !important;
+  color: #e11d48 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.da-doctor-form .field-multiple-table input[type="submit"][value="Remove"]:hover,
+.da-doctor-form .field-multiple-table input[name*="_remove_button"]:hover,
+.da-remove-btn:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+.da-doctor-form .field-multiple-table input[type="submit"][value="Remove"]:active,
+.da-doctor-form .field-multiple-table input[name*="_remove_button"]:active,
+.da-remove-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* Add another item button */
+.da-doctor-form .field-add-more-submit {
+  @apply inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-4 py-2.5 rounded-xl cursor-pointer transition-all shadow-sm;
+}
+
+.da-doctor-form .form-actions {
+  @apply flex items-center gap-3 pt-6 border-t border-slate-200 mt-6;
+}
+
+/* Hide Drupal core clutter inside doctor profile edit */
+.da-doctor-form .field--name-revision-log-message,
+.da-doctor-form details.form-wrapper,
+.da-doctor-form .vertical-tabs {
+  @apply border-slate-200 rounded-xl;
+}
+

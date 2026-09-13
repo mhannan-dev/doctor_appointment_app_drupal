@@ -5,7 +5,9 @@ module.exports = {
     './templates/**/*.twig',
     './templates/**/*.html.twig',
     './*.module',
-    './src/**/*.php'
+    './doctor_appointment.module',
+    './src/**/*.{php,inc}',
+    './**/*.{module,theme,inc,php}'
   ],
   theme: {
     extend: {},

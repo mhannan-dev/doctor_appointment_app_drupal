@@ -1,0 +1,21 @@
+doctor_appointment.manage_doctors:
+  title: 'Manage Doctors'
+  description: 'View doctor roster, manage qualifications, chambers, and create new doctor profiles.'
+  route_name: doctor_appointment.manage_doctors
+  menu_name: content
+  weight: -9
+  options:
+    icon:
+      pack_id: navigation
+      icon_id: entity-user-collection
+
+doctor_appointment.manage_doctors_admin:
+  title: 'Manage Doctors'
+  description: 'View doctor roster, manage qualifications, chambers, and create new doctor profiles.'
+  route_name: doctor_appointment.manage_doctors
+  parent: system.admin_content
+  weight: -10
+  options:
+    icon:
+      pack_id: navigation
+      icon_id: entity-user-collection

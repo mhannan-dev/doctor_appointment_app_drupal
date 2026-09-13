@@ -29,3 +29,20 @@ doctor_appointment.admin_dashboard:
     _title: 'Clinic Administration Dashboard'
   requirements:
     _permission: 'access clinic admin dashboard'
+
+doctor_appointment.manage_doctors:
+  path: '/admin/manage-doctors'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DoctorManagementController::listDoctors'
+    _title: 'Manage Doctors'
+  requirements:
+    _permission: 'access content'
+
+doctor_appointment.clinic_admin_doctors:
+  path: '/clinic-admin/doctors'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DoctorManagementController::listDoctors'
+    _title: 'Manage Doctors'
+  requirements:
+    _permission: 'access content'
+

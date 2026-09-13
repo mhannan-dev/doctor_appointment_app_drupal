@@ -58,6 +58,14 @@ function doctor_appointment_theme(): array {
       'variables' => [],
       'template' => 'clinic-admin-dashboard',
     ],
+    'manage_doctors' => [
+      'variables' => [
+        'doctors' => [],
+        'total_doctors' => 0,
+        'create_url' => NULL,
+      ],
+      'template' => 'manage-doctors',
+    ],
     'page__user__profile' => [
       'template' => 'page--user--profile',
       'base hook' => 'page',
@@ -74,7 +82,28 @@ function doctor_appointment_theme(): array {
       'template' => 'region--content',
       'base hook' => 'region',
     ],
+    'node__doctor_profile' => [
+      'template' => 'node--doctor-profile',
+      'base hook' => 'node',
+    ],
   ];
+}
+
+/**
+ * Helper to check if current route is Doctor Profile add or edit form.
+ */
+function _doctor_appointment_is_doctor_profile_route(): bool {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'node.add') {
+    $node_type = \Drupal::routeMatch()->getParameter('node_type');
+    $type_id = is_object($node_type) ? $node_type->id() : $node_type;
+    return $type_id === 'doctor_profile';
+  }
+  if ($route_name === 'entity.node.edit_form' || $route_name === 'entity.node.canonical') {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    return ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'doctor_profile');
+  }
+  return FALSE;
 }
 
 /**
@@ -83,6 +112,9 @@ function doctor_appointment_theme(): array {
 function doctor_appointment_theme_suggestions_page_alter(array &$suggestions, array $variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   if ($route_name && str_starts_with($route_name, 'doctor_appointment.')) {
+    $suggestions[] = 'page__doctor_appointment_dashboard';
+  }
+  if (_doctor_appointment_is_doctor_profile_route()) {
     $suggestions[] = 'page__doctor_appointment_dashboard';
   }
   if ($route_name === 'doctor_appointment.homepage' || $route_name === 'view.frontpage_page_1' || \Drupal::service('path.current')->getPath() === '/') {
@@ -100,12 +132,22 @@ function doctor_appointment_theme_suggestions_page_alter(array &$suggestions, ar
 }
 
 /**
+ * Implements hook_theme_suggestions_node_alter().
+ */
+function doctor_appointment_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $node = $variables['elements']['#node'] ?? NULL;
+  if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'doctor_profile') {
+    $suggestions[] = 'node__doctor_profile';
+  }
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function doctor_appointment_preprocess_page(array &$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $variables['is_homepage'] = ($route_name === 'doctor_appointment.homepage' || $route_name === 'view.frontpage_page_1' || \Drupal::service('path.current')->getPath() === '/');
-  if ($variables['is_homepage'] || ($route_name && str_starts_with($route_name, 'doctor_appointment.')) || in_array($route_name, ['user.login', 'user.pass', 'user.register', 'user.logout.confirm', 'entity.user.canonical', 'user.page'], TRUE)) {
+  if ($variables['is_homepage'] || _doctor_appointment_is_doctor_profile_route() || ($route_name && str_starts_with($route_name, 'doctor_appointment.')) || in_array($route_name, ['user.login', 'user.pass', 'user.register', 'user.logout.confirm', 'entity.user.canonical', 'user.page'], TRUE)) {
     $variables['#attached']['library'][] = 'doctor_appointment/dashboard';
   }
 
@@ -146,6 +188,80 @@ function doctor_appointment_preprocess_page(array &$variables) {
       ];
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function doctor_appointment_preprocess_node(array &$variables) {
+  $node = $variables['node'] ?? NULL;
+  if (!$node instanceof \Drupal\node\NodeInterface || $node->bundle() !== 'doctor_profile') {
+    return;
+  }
+
+  $variables['#attached']['library'][] = 'doctor_appointment/dashboard';
+
+  $title = $node->getTitle();
+  $clean_name = trim(preg_replace('/^(dr\.?|prof\.?|doctor)\s+/i', '', $title));
+  $parts = preg_split('/\s+/', $clean_name);
+  $initials = '';
+  if (!empty($parts)) {
+    $initials = strtoupper(substr($parts[0], 0, 1));
+    if (count($parts) > 1) {
+      $initials .= strtoupper(substr(end($parts), 0, 1));
+    }
+  }
+
+  $degrees = [];
+  if ($node->hasField('field_degree') && !$node->get('field_degree')->isEmpty()) {
+    foreach ($node->get('field_degree')->getValue() as $item) {
+      if (!empty($item['value'])) {
+        $degrees[] = $item['value'];
+      }
+    }
+  }
+
+  $chambers = [];
+  if ($node->hasField('field_chamber_address') && !$node->get('field_chamber_address')->isEmpty()) {
+    foreach ($node->get('field_chamber_address')->getValue() as $item) {
+      if (!empty($item['value'])) {
+        $chambers[] = $item['value'];
+      }
+    }
+  }
+
+  $specialty = '';
+  if ($node->hasField('field_specialty') && !$node->get('field_specialty')->isEmpty()) {
+    $specialty = $node->get('field_specialty')->value;
+  }
+
+  $experience = '';
+  if ($node->hasField('field_experience') && !$node->get('field_experience')->isEmpty()) {
+    $experience = $node->get('field_experience')->value;
+  }
+
+  $fee = '';
+  if ($node->hasField('field_consultation_fee') && !$node->get('field_consultation_fee')->isEmpty()) {
+    $fee = $node->get('field_consultation_fee')->value;
+  }
+
+  $current_user = \Drupal::currentUser();
+  $can_edit = $node->access('update', $current_user);
+
+  $variables['doctor_data'] = [
+    'id' => $node->id(),
+    'title' => $title,
+    'initials' => $initials ?: 'DR',
+    'specialty' => $specialty,
+    'experience' => $experience,
+    'fee' => $fee,
+    'degrees' => $degrees,
+    'chambers' => $chambers,
+    'status' => $node->isPublished(),
+    'can_edit' => $can_edit,
+    'edit_url' => $can_edit ? Url::fromRoute('entity.node.edit_form', ['node' => $node->id()])->toString() : NULL,
+    'manage_url' => Url::fromRoute('doctor_appointment.manage_doctors')->toString(),
+  ];
 }
 
 /**
@@ -207,3 +323,145 @@ function doctor_appointment_user_login($account) {
     $request->query->set('destination', $destination);
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ */
+function doctor_appointment_form_node_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (!in_array($form_id, ['node_doctor_profile_form', 'node_doctor_profile_edit_form'], TRUE)) {
+    return;
+  }
+
+  $form['#attached']['library'][] = 'doctor_appointment/dashboard';
+  $form['#attributes']['class'][] = 'da-doctor-form';
+
+  $is_edit = ($form_id === 'node_doctor_profile_edit_form');
+  $page_title = $is_edit ? t('Edit Doctor Profile') : t('Create Doctor Profile');
+  $page_subtitle = $is_edit
+    ? t('Update doctor qualifications, specialty, chamber addresses, and consultation fees.')
+    : t('Onboard a new medical specialist with qualifications, chamber locations, and consultation fees.');
+
+  // Beautiful Header Card Prefix
+  $form['#prefix'] = '
+  <div class="da-doctor-form-card max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-slate-200/80 shadow-sm mb-8 space-y-6">
+    <div class="border-b border-slate-100 pb-6 mb-6">
+      <div class="flex items-center gap-2 mb-2">
+        <a href="/admin/manage-doctors" class="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-full border border-teal-200/60 no-underline transition-colors">
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          ' . t('Back to Manage Doctors') . '
+        </a>
+        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">
+          ' . t('Doctor Profile') . '
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 mt-2">
+        ' . $page_title . '
+      </h1>
+      <p class="mt-1 text-sm text-slate-500 leading-relaxed">
+        ' . $page_subtitle . '
+      </p>
+    </div>';
+
+  $form['#suffix'] = '</div>';
+
+  // Customize field inputs
+  if (isset($form['title']['widget'][0]['value'])) {
+    $form['title']['widget'][0]['value']['#attributes']['placeholder'] = 'e.g. Dr. Sarah Jenkins, MD';
+    $form['title']['widget'][0]['value']['#attributes']['class'][] = 'da-input';
+  }
+
+  if (isset($form['field_specialty']['widget'][0]['value'])) {
+    $form['field_specialty']['widget'][0]['value']['#attributes']['placeholder'] = 'e.g. Cardiology, Neurologist, Pediatrics';
+    $form['field_specialty']['widget'][0]['value']['#attributes']['class'][] = 'da-input';
+  }
+
+  if (isset($form['field_experience']['widget'][0]['value'])) {
+    $form['field_experience']['widget'][0]['value']['#attributes']['placeholder'] = 'e.g. 10';
+    $form['field_experience']['widget'][0]['value']['#attributes']['class'][] = 'da-input';
+  }
+
+  if (isset($form['field_consultation_fee']['widget'][0]['value'])) {
+    $form['field_consultation_fee']['widget'][0]['value']['#attributes']['placeholder'] = 'e.g. 1200.00';
+    $form['field_consultation_fee']['widget'][0]['value']['#attributes']['class'][] = 'da-input';
+  }
+
+  // Style multi-value items
+  if (isset($form['field_degree']['widget'])) {
+    foreach (\Drupal\Core\Render\Element::children($form['field_degree']['widget']) as $delta) {
+      if (isset($form['field_degree']['widget'][$delta]['value'])) {
+        $form['field_degree']['widget'][$delta]['value']['#attributes']['placeholder'] = 'e.g. MBBS, FCPS (Medicine), MD (Cardiology)';
+        $form['field_degree']['widget'][$delta]['value']['#attributes']['class'][] = 'da-input';
+      }
+      foreach (['_actions', 'actions'] as $act_key) {
+        if (isset($form['field_degree']['widget'][$delta][$act_key]['delete'])) {
+          $form['field_degree']['widget'][$delta][$act_key]['delete']['#attributes']['class'][] = 'da-remove-btn';
+        }
+      }
+    }
+  }
+
+  if (isset($form['field_chamber_address']['widget'])) {
+    foreach (\Drupal\Core\Render\Element::children($form['field_chamber_address']['widget']) as $delta) {
+      if (isset($form['field_chamber_address']['widget'][$delta]['value'])) {
+        $form['field_chamber_address']['widget'][$delta]['value']['#attributes']['placeholder'] = 'e.g. Room 402, Green Life Hospital, Green Road, Dhaka';
+        $form['field_chamber_address']['widget'][$delta]['value']['#attributes']['class'][] = 'da-input h-20 resize-y';
+      }
+      foreach (['_actions', 'actions'] as $act_key) {
+        if (isset($form['field_chamber_address']['widget'][$delta][$act_key]['delete'])) {
+          $form['field_chamber_address']['widget'][$delta][$act_key]['delete']['#attributes']['class'][] = 'da-remove-btn';
+        }
+      }
+    }
+  }
+
+  // Customize actions
+  if (isset($form['actions']['submit'])) {
+    $form['actions']['submit']['#value'] = t('Save Doctor Profile');
+    $form['actions']['submit']['#attributes']['class'] = [
+      'da-submit-btn',
+      'inline-flex',
+      'items-center',
+      'justify-center',
+      'px-8',
+      'py-3',
+      'text-sm',
+      'font-bold',
+      'text-white',
+      'rounded-xl',
+      'cursor-pointer',
+      'shadow-md',
+      'shadow-teal-600/20',
+      'hover:shadow-lg',
+      'transition-all',
+    ];
+  }
+
+  $form['actions']['cancel'] = [
+    '#type' => 'link',
+    '#title' => t('Cancel'),
+    '#url' => Url::fromRoute('doctor_appointment.manage_doctors'),
+    '#attributes' => [
+      'class' => [
+        'da-logout-cancel-btn',
+        'inline-flex',
+        'items-center',
+        'justify-center',
+        'px-6',
+        'py-3',
+        'text-sm',
+        'font-bold',
+        'text-slate-700',
+        'bg-slate-100',
+        'hover:bg-slate-200',
+        'border',
+        'border-slate-300',
+        'rounded-xl',
+        'cursor-pointer',
+        'transition-all',
+        'no-underline',
+      ],
+    ],
+    '#weight' => 20,
+  ];
+}
+
