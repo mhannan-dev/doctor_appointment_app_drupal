@@ -1,18 +1,18 @@
-services:
+﻿services:
   drupal:
     build: .
     ports:
-      - "8090:80"
+      - 8091:80
     volumes:
       - .:/var/www/html
-      - drupal_vendor:/var/www/html/vendor
-      - drupal_core:/var/www/html/web/core
+      - doc_appointment_vendor:/var/www/html/vendor
+      - doc_appointment_core:/var/www/html/web/core
     environment:
       DRUPAL_DB_HOST: db
-      DRUPAL_DB_PORT: "3306"
-      DRUPAL_DB_NAME: ${MYSQL_DATABASE:-drupal}
-      DRUPAL_DB_USER: ${MYSQL_USER:-drupal}
-      DRUPAL_DB_PASSWORD: ${MYSQL_PASSWORD:-drupal}
+      DRUPAL_DB_PORT: 3306
+      DRUPAL_DB_NAME: 
+      DRUPAL_DB_USER: 
+      DRUPAL_DB_PASSWORD: 
     depends_on:
       db:
         condition: service_healthy
@@ -25,21 +25,21 @@ services:
       - --innodb_redo_log_capacity=128M
       - --max_connections=150
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-drupal}
-      MYSQL_USER: ${MYSQL_USER:-drupal}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-drupal}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: 
+      MYSQL_USER: 
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
     volumes:
-      - db_data:/var/lib/mysql
+      - doc_appointment_db_data:/var/lib/mysql
     ports:
-      - "3308:3306"
+      - 3309:3306
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      test: [CMD, mysqladmin, ping, -h, localhost, -uroot, -p]
       interval: 5s
       timeout: 5s
       retries: 20
 
 volumes:
-  db_data:
-  drupal_vendor:
-  drupal_core:
+  doc_appointment_db_data:
+  doc_appointment_vendor:
+  doc_appointment_core:
