@@ -1,0 +1,16 @@
+access patient dashboard:
+  title: 'Access Patient Dashboard'
+  description: 'Allow patients to view their dashboard, upcoming appointments, and book new visits.'
+
+access doctor dashboard:
+  title: 'Access Doctor Dashboard'
+  description: 'Allow doctors to view their daily schedule, patient queue, and update appointment statuses.'
+
+access clinic admin dashboard:
+  title: 'Access Clinic Admin Dashboard'
+  description: 'Allow clinic managers to view system analytics, manage all appointments, and manage doctors.'
+
+administer doctor appointment:
+  title: 'Administer Doctor Appointment System'
+  description: 'Full administrative rights to doctor appointment configuration and master settings.'
+  restrict access: true

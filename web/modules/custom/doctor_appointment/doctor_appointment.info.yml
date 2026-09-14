@@ -1,0 +1,11 @@
+name: 'Doctor Appointment System'
+type: module
+description: 'Comprehensive Doctor Appointment Booking System with scheduling engine, role-based workflows, and portals.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:taxonomy
+  - drupal:user
+  - drupal:datetime
+  - drupal:options

@@ -1,0 +1,12 @@
+app_theme:
+  version: 1.0
+  css:
+    theme:
+      https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap: { type: external }
+      https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css: { type: external }
+      css/dashboard.css: {}
+  js:
+    js/booking.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings

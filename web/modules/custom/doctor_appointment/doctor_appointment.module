@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Doctor Appointment System module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function doctor_appointment_theme($existing, $type, $theme, $path) {
+  return [
+    'doctor_directory' => [
+      'variables' => [
+        'doctors' => [],
+        'specialties' => [],
+        'chambers' => [],
+        'selected_specialty' => NULL,
+        'selected_chamber' => NULL,
+        'search_query' => '',
+        'total_doctors' => 0,
+      ],
+      'template' => 'doctor-directory',
+    ],
+    'doctor_profile_detail' => [
+      'variables' => [
+        'doctor' => [],
+      ],
+      'template' => 'doctor-profile-detail',
+    ],
+    'booking_wizard' => [
+      'variables' => [
+        'doctor' => [],
+        'available_dates' => [],
+        'selected_date' => '',
+        'slots' => [],
+        'current_user_data' => [],
+      ],
+      'template' => 'booking-wizard',
+    ],
+    'patient_dashboard' => [
+      'variables' => [
+        'patient_name' => '',
+        'upcoming_appointments' => [],
+        'past_appointments' => [],
+        'stats' => [],
+      ],
+      'template' => 'patient-dashboard',
+    ],
+    'doctor_dashboard' => [
+      'variables' => [
+        'doctor_name' => '',
+        'doctor_id' => 0,
+        'today_date' => '',
+        'today_appointments' => [],
+        'upcoming_appointments' => [],
+        'stats' => [],
+      ],
+      'template' => 'doctor-dashboard',
+    ],
+    'clinic_admin_dashboard' => [
+      'variables' => [
+        'stats' => [],
+        'recent_appointments' => [],
+        'doctors' => [],
+        'filter_status' => 'all',
+      ],
+      'template' => 'clinic-admin-dashboard',
+    ],
+    'appointment_track' => [
+      'variables' => [
+        'searched' => FALSE,
+        'ref_number' => '',
+        'appointment' => NULL,
+        'error' => '',
+      ],
+      'template' => 'appointment-track',
+    ],
+  ];
+}

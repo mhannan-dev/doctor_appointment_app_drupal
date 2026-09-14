@@ -1,0 +1,82 @@
+doctor_appointment.directory:
+  path: '/doctors'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DirectoryController::listDoctors'
+    _title: 'Find Doctors & Book Appointment'
+  requirements:
+    _access: 'TRUE'
+
+doctor_appointment.doctor_detail:
+  path: '/doctor/{node}'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DirectoryController::viewDoctor'
+    _title: 'Doctor Profile'
+  requirements:
+    _access: 'TRUE'
+    node: \d+
+
+doctor_appointment.booking:
+  path: '/book-appointment/{node}'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\BookingController::bookingForm'
+    _title: 'Book an Appointment'
+  requirements:
+    _access: 'TRUE'
+    node: \d+
+
+doctor_appointment.booking_submit:
+  path: '/book-appointment/{node}/submit'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\BookingController::submitBooking'
+  requirements:
+    _access: 'TRUE'
+    _csrf_token: 'FALSE'
+  methods: [POST]
+
+doctor_appointment.track:
+  path: '/appointment/track'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\TrackController::trackPage'
+    _title: 'Track Appointment Status'
+  requirements:
+    _access: 'TRUE'
+
+doctor_appointment.track_lookup:
+  path: '/appointment/track/lookup'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\TrackController::lookup'
+  requirements:
+    _access: 'TRUE'
+  methods: [POST, GET]
+
+doctor_appointment.patient_dashboard:
+  path: '/patient/dashboard'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DashboardController::patientDashboard'
+    _title: 'Patient Portal'
+  requirements:
+    _permission: 'access patient dashboard'
+
+doctor_appointment.doctor_dashboard:
+  path: '/doctor/dashboard'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DashboardController::doctorDashboard'
+    _title: 'Doctor Clinical Console'
+  requirements:
+    _permission: 'access doctor dashboard'
+
+doctor_appointment.clinic_admin_dashboard:
+  path: '/clinic-admin/dashboard'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\DashboardController::clinicAdminDashboard'
+    _title: 'Clinic Administration Console'
+  requirements:
+    _permission: 'access clinic admin dashboard'
+
+doctor_appointment.appointment_action:
+  path: '/appointment/{node}/action/{action}'
+  defaults:
+    _controller: '\Drupal\doctor_appointment\Controller\AppointmentActionController::performAction'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    node: \d+
